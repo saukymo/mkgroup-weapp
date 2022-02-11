@@ -1,8 +1,6 @@
 {
   "pages": [
-    "pages/goods/index",
-    "pages/user/index",
-    "pages/cart/index"
+    "pages/goods/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

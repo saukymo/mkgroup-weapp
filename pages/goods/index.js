@@ -1,63 +1,50 @@
+import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
+
 Page({
   data: {
-    goods: {
-      title: '美国伽力果（约680g/3个）',
-      price: 2680,
-      formatPrice: '',
-      express: '免运费',
-      remain: 19,
-      thumb:
-        'https://img.yzcdn.cn/public_files/2017/10/24/e5a5a02309a41f9f5def56684808d9ae.jpeg',
-    },
+    value: '',
+    results: [
+      {name: '1'},
+      {name: '2'},
+      {name: '3'},
+      {name: '4'},
+      {name: '5'}
+    ]
   },
+
   onLoad() {
-    const { goods } = this.data;
-    const formatPrice = `¥${(goods.price / 100).toFixed(2)}`;
     this.setData({
-      goods: {
-        ...goods,
-        formatPrice,
+      value: '',
+    })
+  },
+
+  async onSearch() {
+    const res = await wx.cloud.callContainer({
+      config: {
+        env: "prod-0g6q80gxf1232b84", // 微信云托管环境ID，不能为空，替换自己的
       },
+      path: '/scripts', // 填入业务自定义路径和参数，根目录，就是 / 
+      method: 'GET', // 按照自己的业务开发，选择对应的方法
+      header: {
+        'X-WX-SERVICE': 'flask-1d21',
+      }
     });
+    
+    console.log(res);
+    this.setData({
+      results: res.data.data,
+    })
   },
 
-  onClickCart() {
-    wx.navigateTo({
-      url: '/pages/cart/index',
-      success: () => {},
-      error: () => {
-        wx.showToast({
-          icon: 'none',
-          title: '打开购物车失败',
-        });
-      },
-    });
+  onChange(e) {
+    this.setData({
+      value: e.detail,
+    })
   },
 
-  onClickUser() {
-    wx.navigateTo({
-      url: '/pages/user/index',
-      success: () => {},
-      error: () => {
-        wx.showToast({
-          icon: 'none',
-          title: '打开个人中心失败',
-        });
-      },
-    });
-  },
+  onTap(e) {
+    Toast(e.currentTarget.id);
+    console.log(e)
+  }
 
-  onClickButton() {
-    wx.showToast({
-      title: '暂无后续逻辑~',
-      icon: 'none',
-    });
-  },
-
-  sorry() {
-    wx.showToast({
-      title: '暂无后续逻辑~',
-      icon: 'none',
-    });
-  },
 });
